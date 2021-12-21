@@ -12,7 +12,7 @@ def home():
 @app.route("/completion-engine", methods=['POST'])
 def completionEngine():
     #openai body parameters
-    openai.api_key=os.getenv("OPENAI_API_KEY");
+    openai.api_key=request.headers.get('api_key');
     openai_engine=request.form['engine']
     openai_prompt=request.form['prompt']
     openai_temperature=request.form['temperature']
