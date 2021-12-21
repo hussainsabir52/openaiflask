@@ -38,7 +38,7 @@ def completionEngine():
       logprobs=10
     )
     filter_output_label=filter_response['choices'][0]['text']
-    return flask.jsonify({"text": response['choices'][0]['text'], "toxicity":filter_output_label})
+    return flask.jsonify({"response": response, "toxicity":filter_output_label})
 
 @app.route("/completion-model", methods=['POST'])
 def completionModel():
