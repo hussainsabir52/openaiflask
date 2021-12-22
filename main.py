@@ -4,6 +4,7 @@ import openai
 import flask
 import random
 
+
 app = Flask(__name__)
 
 
@@ -34,7 +35,7 @@ def completionEngine():
     )
     
     text=response['choices'][0]['text']
-    token_count=int(len(text)/4)
+    token_count=int(len(text.split()))
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
@@ -73,7 +74,7 @@ def completionModel():
     user=str(random.getrandbits(32))
     )
     text=response['choices'][0]['text']
-    token_count=int(len(text)/4)
+    token_count=int(len(text.split()))
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
