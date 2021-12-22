@@ -3,7 +3,8 @@ from flask import Flask, request
 import openai
 import flask
 import random
-
+from transformers import BertTokenizer
+bert_tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
 app = Flask(__name__)
 
@@ -33,6 +34,9 @@ def completionEngine():
     stop=openai_stop,
     user=str(random.getrandbits(32))
     )
+    
+    text=response['choices'][0]['text']
+    token_count=len(bert_tokenizer.tokenize(text))
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
@@ -46,7 +50,7 @@ def completionEngine():
     
     ## Toxicity Result Label
     filter_output_label=filter_response['choices'][0]['text']
-    return flask.jsonify({"response": response, "toxicity":filter_output_label})
+    return flask.jsonify({"completion":response['choices'][0]['text'], "token_length":token_count,"toxicity":filter_output_label})
 
 @app.route("/completion-model", methods=['POST'])
 def completionModel():
@@ -70,6 +74,8 @@ def completionModel():
     stop=openai_stop,
     user=str(random.getrandbits(32))
     )
+    text=response['choices'][0]['text']
+    token_count=len(bert_tokenizer.tokenize(text))
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
@@ -83,7 +89,7 @@ def completionModel():
     
     ## Toxicity Result Label
     filter_output_label=filter_response['choices'][0]['text']
-    return flask.jsonify({"response": response, "toxicity":filter_output_label})
+    return flask.jsonify({"completion":response['choices'][0]['text'], "token_length":token_count, "toxicity":filter_output_label})
 
 
 if __name__ == "__main__":
