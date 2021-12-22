@@ -34,7 +34,7 @@ def completionEngine():
     )
     
     text=response['choices'][0]['text']
-    token_count=(len(text)/4)
+    token_count=int(len(text)/4)
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
@@ -73,7 +73,7 @@ def completionModel():
     user=str(random.getrandbits(32))
     )
     text=response['choices'][0]['text']
-    token_count=(len(text)/4)
+    token_count=int(len(text)/4)
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
