@@ -13,18 +13,19 @@ def home():
     return "Hello Darkness My Old Friend!"
 
 @app.route("/completion-engine", methods=['POST'])
-async def completionEngine():
-    #openai body parameters
+def completionEngine():
+    request_data = request.get_json()
+    # #openai body parameters
     openai.api_key=request.headers.get('api_key');
-    # openai.organization=request.headers.get('organization')
-    openai_engine=request.form['engine']
-    openai_prompt=request.form['prompt']
-    openai_temperature=request.form['temperature']
-    openai_maxtokens=request.form['max_tokens']
-    openai_stop=request.form['stop']
+    openai.organization=request.headers.get('organization')
+    openai_engine=request_data['engine']
+    openai_prompt=request_data['prompt']
+    openai_temperature=request_data['temperature']
+    openai_maxtokens=request_data['max_tokens']
+    openai_stop=request_data['stop']
     
     ## Completion Request
-    response = await openai.Completion.create(
+    response = openai.Completion.create(
     engine=openai_engine,
     prompt=openai_prompt,
     temperature=float(openai_temperature),
@@ -35,7 +36,7 @@ async def completionEngine():
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
-    filter_response = await openai.Completion.create(
+    filter_response = openai.Completion.create(
       engine="content-filter-alpha",
       prompt = "<|endoftext|>"+openai_content_to_verify+"\n--\nLabel:",
       temperature=0,
@@ -49,14 +50,16 @@ async def completionEngine():
 
 @app.route("/completion-model", methods=['POST'])
 def completionModel():
+    request_data = request.get_json()
+    print(request_data)
     ## Openai body parameters
     openai.api_key=request.headers.get('api_key');
     openai.organization=request.headers.get('organization')
-    openai_model=request.form['model']
-    openai_prompt=request.form['prompt']
-    openai_temperature=request.form['temperature']
-    openai_maxtokens=request.form['max_tokens']
-    openai_stop=request.form['stop']
+    openai_model=request_data['model']
+    openai_prompt=request_data['prompt']
+    openai_temperature=request_data['temperature']
+    openai_maxtokens=request_data['max_tokens']
+    openai_stop=request_data['stop']
     
     ## Completion Request
     response = openai.Completion.create(
