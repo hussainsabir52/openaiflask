@@ -3,7 +3,7 @@ from flask import Flask, request
 import openai
 import flask
 import random
-from transformers import GPT2TokenizerFast, GPT2LMHeadModel
+from transformers import GPT2TokenizerFast
 tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
 app = Flask(__name__)
