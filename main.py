@@ -3,7 +3,8 @@ from flask import Flask, request
 import openai
 import flask
 import random
-
+from transformers import GPT2TokenizerFast, GPT2LMHeadModel
+tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
 app = Flask(__name__)
 
@@ -35,7 +36,7 @@ def completionEngine():
     )
     
     text=response['choices'][0]['text']
-    token_count=int(len(text.split()))
+    token_count=int(len(tokenizer.tokenize(text)))
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
@@ -74,7 +75,7 @@ def completionModel():
     user=str(random.getrandbits(32))
     )
     text=response['choices'][0]['text']
-    token_count=int(len(text.split()))
+    token_count=int(len(tokenizer.tokenize(text)))
     openai_content_to_verify = response['choices'][0]['text']
     
     ## Toxicity Check
